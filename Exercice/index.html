@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Three.js Crash Course</title>
+</head>
+<style>
+	body{margin: 0;}
+	canvas{ width:100%; height:100%;}
+	div{z-index: 10;
+		color: #19e;
+		background-color: #19e;
+		width: 100px;
+		height: 100px;}
+</style>
+<body>
+	<div></div>
+	<script src="js/three.js"></script>
+	<script src="js/OBJLoader.js"></script>
+	<script src="js/OrbitControls.js"></script>
+	
+	<script>
+
+
+01
+var lesson10 = {
+02
+  scene: null, camera: null, renderer: null,
+03
+  container: null, controls: null,
+04
+  clock: null, stats: null,
+05
+  plane: null, selection: null, offset: new THREE.Vector3(), objects: [],
+06
+  raycaster: new THREE.Raycaster(),
+07
+  init: function() {
+08
+    // Create main scene
+09
+    this.scene = new THREE.Scene();
+10
+    this.scene.fog = new THREE.FogExp2(0xcce0ff, 0.0003);
+11
+    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+12
+    // Prepare perspective camera
+13
+    var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 1, FAR = 1000;
+14
+    this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+15
+    this.scene.add(this.camera);
+16
+    this.camera.position.set(100, 0, 0);
+17
+    this.camera.lookAt(new THREE.Vector3(0,0,0));
+18
+    // Prepare webgl renderer
+19
+    this.renderer = new THREE.WebGLRenderer({ antialias:true });
+20
+    this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+21
+    this.renderer.setClearColor(this.scene.fog.color);
+22
+    // Prepare container
+23
+    this.container = document.createElement('div');
+24
+    document.body.appendChild(this.container);
+25
+    this.container.appendChild(this.renderer.domElement);
+26
+    // Events
+27
+    THREEx.WindowResize(this.renderer, this.camera);
+28
+    document.addEventListener('mousedown', this.onDocumentMouseDown, false);
+29
+    document.addEventListener('mousemove', this.onDocumentMouseMove, false);
+30
+    document.addEventListener('mouseup', this.onDocumentMouseUp, false);
+31
+    // Prepare Orbit controls
+32
+    this.controls = new THREE.OrbitControls(this.camera);
+33
+    this.controls.target = new THREE.Vector3(0, 0, 0);
+34
+    this.controls.maxDistance = 150;
+35
+    // Prepare clock
+36
+    this.clock = new THREE.Clock();
+37
+    // Prepare stats
+38
+    this.stats = new Stats();
+39
+    this.stats.domElement.style.position = 'absolute';
+40
+    this.stats.domElement.style.left = '50px';
+41
+    this.stats.domElement.style.bottom = '50px';
+42
+    this.stats.domElement.style.zIndex = 1;
+43
+    this.container.appendChild( this.stats.domElement );
+44
+    // Add lights
+45
+    this.scene.add( new THREE.AmbientLight(0x444444));
+46
+    var dirLight = new THREE.DirectionalLight(0xffffff);
+47
+    dirLight.position.set(200, 200, 1000).normalize();
+48
+    this.camera.add(dirLight);
+49
+    this.camera.add(dirLight.target);
+50
+    ....
+51
+  },
+52
+  addSkybox: function() {
+53
+    ....
+54
+  },
+55
+  onDocumentMouseDown: function (event) {
+56
+    ....
+57
+  },
+58
+  onDocumentMouseMove: function (event) {
+59
+    ....
+60
+  },
+61
+  onDocumentMouseUp: function (event) {
+62
+    ....
+63
+  }
+64
+};
+65
+// Animate the scene
+66
+function animate() {
+67
+  requestAnimationFrame(animate);
+68
+  render();
+69
+  update();
+70
+}
+71
+// Update controls and stats
+72
+function update() {
+73
+  var delta = lesson10.clock.getDelta();
+74
+  lesson10.controls.update(delta);
+75
+  lesson10.stats.update();
+76
+}
+77
+// Render the scene
+78
+function render() {
+79
+  if (lesson10.renderer) {
+80
+    lesson10.renderer.render(lesson10.scene, lesson10.camera);
+81
+  }
+82
+}
+83
+// Initialize lesson on page load
+84
+function initializeLesson() {
+85
+  lesson10.init();
+86
+  animate();
+87
+}
+88
+if (window.addEventListener)
+89
+  window.addEventListener('load', initializeLesson, false);
+90
+else if (window.attachEvent)
+91
+  window.attachEvent('onload', initializeLesson);
+92
+else window.onload = initializeLesson;
+
+	</script>
+
+
+
+</body>
+</html>

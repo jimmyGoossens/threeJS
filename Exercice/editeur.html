@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mods Editor</title>
+	  <link rel="stylesheet" type="text/css" href="editeur.css">
+</head>
+<body >
+	
+		<div id="sideLeft">
+				
+				<div class="contenu">
+					<h1 id="mods">MOD's</h1>
+					<div class="titre"><h2>SURFACE</h2></div>
+						<p>Empty</p>
+						<p>floor</p>
+						<p>Walls</p>	
+					<div class="titre"><h2>MODS</h2></div>
+						<p>Mod's</p>
+						<p>preset</p>
+						<p>my preset</p>
+					<div class="titre"><h2>ASSETS</h2></div>
+						<p>covering</p>
+						<p>props</p>
+						<p>images</p>
+						<p>lights</p>
+					<div class="titre"><h2>SAVE</h2></div>
+			
+				</div>
+				<div class="contenu">
+					<button id="envoi">hide</button>
+						
+				</div>	
+		
+		</div>
+		<div id="sideRight">
+			<div class="titre"><h1>LAYERS</h1></div>
+				<p>Mods 1</p>
+			<div class="titre"><h2>HISTORY</h2></div>
+			<div>
+				<input type="checkbox" name="multi[]" id="check">
+				<button id="move">manipuler</button>
+				<button id="fix">set</button>
+				<button id="supprimer">supprimer</button>
+				<button id="tourner">tourner</button>
+				<button id="translate">translate</button>
+				<button id="duplicate">duplicate</button>
+			</div>	
+		</div>
+	
+
+
+
+	<script src="js/three.js"></script>
+	<script src="js/OBJLoader.js"></script>
+	<script src="js/OrbitControls.js"></script>
+	<script src="js/TransformControls.js"></script>
+
+
+	
+	<script>	
+//préparation de scene	
+
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000 );
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+		window.addEventListener('resize', function(){
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			renderer.setSize(width,height);
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+		});
+		var controls = new THREE.OrbitControls(camera);
+		camera.position.z = 2000;
+		camera.position.y= 3000;
+		camera.position.x= 3000;
+		scene.add( new THREE.GridHelper( 7000, 10 ) );
+		var loader = new THREE.OBJLoader();
+		// load a resource
+		loader.load(
+		// resource URL
+		'models/Mods_2.obj',
+		// called when resource is loaded
+		function ( object ) {
+			
+			scene.add( object );
+			object.position.set(100,100,100);
+		
+			console.log(object.children[1]);		
+		},
+		// called when loading is in progresses
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		// called when loading has errors
+		function ( error ) {
+			console.log( 'An error happened' );
+		});
+//ajouter un mods
+	document.getElementById("mods").addEventListener("click",function(){
+
+		loader.load(
+		'models/Mods_2.obj',
+		// called when resource is loaded
+		function ( object ) {
+			scene.add( object );
+			object.position.set(10,25,30);
+		},
+		// called when loading is in progresses
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		// called when loading has errors
+		function ( error ) {
+			console.log( 'An error happened' );
+		});
+	});
+
+//hide the menu
+	document.getElementById('envoi').addEventListener("click", function(){
+		var side = document.getElementsByClassName("contenu")[0];
+
+		 if (side.style.display === "none") {
+	        side.style.display = "block";
+	    } else {
+	        side.style.display = "none";
+	    }
+	});
+// ajout lumière et lancement de scene
+	var lumiereAmbiante = new THREE.AmbientLight(0xFFFFFF,5.0);
+	scene.add(lumiereAmbiante);
+
+			function render() {
+
+				controls.update();
+
+				renderer.render( scene, camera );
+
+			}
+	var gameLoop = function(){
+
+		requestAnimationFrame(gameLoop);
+		render();
+	};
+	gameLoop();
+
+	</script>
+
+	<script src="multiSelect.js"></script>
+
+</body>
+</html>
